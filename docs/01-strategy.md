@@ -39,6 +39,8 @@ The brief asks for sharp prioritization, so here is the explicit order of operat
 3. **Launch the Builder Series flagship** — the Render "Fine-Tune & Ship" Challenge (Part II) as the first tentpole: the moment TL shifts from content-you-consume to community-you-build-in.
 4. **Recruit the first 3–5 ambassadors** — from the members those two programs surface. Ambassadors are recruited from demonstrated engagement, not applications from strangers, which is why this step comes last.
 
+**Running in parallel from day one, not sequenced above:** Community Partnerships (see below) — reaching out to 2–3 aligned Toronto AI communities to co-host a first joint event has no dependency on the baseline audit or anything else in the sequence, so it starts immediately rather than waiting its turn.
+
 **What Year 1 deliberately won't do:**
 - **No paid member acquisition** — growth must come from content quality and ambassador reach; paid growth would inflate exactly the vanity metric we've said doesn't matter.
 - **No new platforms or custom infrastructure** — Luma + existing channels are enough; engineering effort goes into content and programs, not tooling.
@@ -64,11 +66,28 @@ The mechanism that lets TL scale into SF/NYC without headcount, and converts the
 - **Who gets selected:** proven community operators or technically credible builders (NVIDIA/OpenAI's bar) — not just enthusiastic members. Selectivity is what makes the recognition worth something.
 - **Why it matters strategically:** ambassador-led events in SF/NYC solve the "leading technical hubs" requirement in the case study brief without opening an office there. And ambassadors are disproportionately likely to become the founders, hires, or portfolio-relevant relationships the other two pillars are optimizing for — the program is a talent and ecosystem pipeline disguised as an events program.
 
+## Community Partnerships: The Fastest Lever
+
+Ambassadors build new local presence from near-zero — recruiting, vetting, and ramping a person takes months before their first event happens. Community Partnerships skip that: Toronto's AI builder scene already exists, already runs events, and is already engaged — what most of these groups actually lack is venue access and sponsorship, not audience. That's a gap Georgian can close in week 1, not month 3.
+
+**Real, currently active Toronto communities this targets** (researched directly, not assumed):
+- **[AI Tinkerers Toronto](https://toronto.aitinkerers.org/)** — the Toronto chapter of a 245-city, 116,000+ member global network built specifically for hands-on builders (working prototypes and architecture lessons, not sales talks) — the same ethos as the Builder Series.
+- **[BUILD FUTURE](https://buildfuture.ai/)** — Toronto's own AI builder community, which already runs events hosted at other companies' offices (e.g. a Claude Code meetup at ADA HQ in February 2026) — direct proof this exact "borrow a company's venue" model already works in this city, with someone else's building.
+
+**The mechanism:**
+- **Georgian's venue as the offer** — the same Toronto office already earmarked for Ambassadors, extended to communities Georgian doesn't have to build or vet from scratch.
+- **Co-host on Luma, not just cross-promote** — Luma supports adding a co-host to an event and submitting one event to another calendar so it can appear on both simultaneously. A co-hosted event shows up on TL's Luma calendar *and* the partner community's own calendar/follower base at the same time — the actual mechanism behind "reach their audience," not a hope.
+- **Selection filter** — partner with communities whose focus already overlaps a TL pillar (hands-on builder meetups → Builder Series, research/paper-reading groups → Lab Series), so a co-hosted event slots into the existing content engine instead of becoming a disconnected one-off.
+
+**The first concrete slot for this:** the Render Fine-Tune & Ship Challenge (Part II) already has two in-person evenings on its own timeline — Kickoff (Week 1) and Demo Day (Week 8), each ~4 hours at Georgian's Toronto office. Either is a ready-made first co-host night with AI Tinkerers Toronto or BUILD FUTURE, rather than a hypothetical future event.
+
+**Why it's sequenced differently from Ambassadors:** this doesn't wait in the 90-day line — it runs in parallel from day one, since it needs no baseline audit and no vetting cycle. It's a lightweight, low-commitment addition to Q1, not competing with it.
+
 ## Resourcing & Cross-Functional Collaboration
 
 The **Lead AI Advocate** orchestrates; no single function can run this alone:
 - **AI Lab** supplies the technical substance — research, the fine-tuning toolkit, speakers for Lab Series and Builder Series episodes.
-- **Marketing & Events** handle production and promotion — Luma page management, recap content, cross-channel distribution.
+- **Marketing & Events** handle production and promotion — Luma page management, recap content, cross-channel distribution, and outreach to community-partnership co-hosts.
 - **RevOps & Investment** feed in portfolio-company intros and define what "quality" talent/deal signal actually looks like to them, so the community isn't optimizing for vanity metrics.
 - **Portfolio companies** (like Render in Part II) co-host flagship episodes, supplying both technical credibility and a talent destination.
 - **Partners** (e.g., Vector Institute) supply speakers and academic credibility for Founder Talks.
@@ -86,4 +105,5 @@ Quality over vanity, deliberately:
 - **Event NPS**, tracked per series so underperforming formats can be cut early
 - **Ambassador program health** — number of active ambassadors, ambassador-led events, and geographic spread outside Toronto (the direct measure of the SF/NYC push)
 - **Luma subscriber growth per city** — the built-in, no-extra-infrastructure read on reach
+- **Co-hosted community events, and net-new TL subscribers per event** — the direct measure of whether Community Partnerships are actually converting a partner's audience into TL's, not just producing a nicer event
 - **Quarterly community-signal brief delivered to Investment/AI Lab** — shipped on time, and at least one insight per quarter that Investment flags as genuinely useful (the trend-sensing engine, measured)

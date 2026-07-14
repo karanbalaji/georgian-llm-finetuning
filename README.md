@@ -12,8 +12,11 @@ This codebase serves as a premium portfolio demonstration of the Lead AI Advocat
 *   **Dialog Registration Portal:** A client-side dialog system permitting builders to register for specific tracks (Support triage, Document summarizer, or custom use cases) and receive starter cloud vouchers.
 *   **Mentor & Host Showcase:** Interactive grid cards introducing the engineers from Georgian AI Lab, Render infrastructure teams, and community ambassadors.
 *   **Kickoff Agenda:** Time-blocked timeline breakdown of the event kickoff day schedule.
-*   **Walkthrough Guide:** A tabbed instructions page (`/walkthrough`) detailing local quantization settings, hyperparameter inputs, code-block copying, troubleshooting strategies, and a one-click **"Deploy to Render"** trigger.
+*   **Walkthrough Guide:** A tabbed instructions page (`/walkthrough`) detailing local quantization settings, hyperparameter inputs, code-block copying, troubleshooting strategies, a live in-browser test of a real classifier (not mocked), and a one-click **"Deploy to Render"** trigger.
+*   **Live Router Classifier (`/api/classify`):** A small TF-IDF + logistic-regression model, trained on a labeled dataset (`src/data/router-dataset.json`), served from a real Next.js Route Handler — a working, self-contained demonstration of the "local model vs. frontier API" routing decision described in `docs/02-tactics.md`, citing the [Stanford study](https://scalingintelligence.stanford.edu/pubs/ipw/) on ChatGPT query routability. Zero additional runtime dependencies — pure TypeScript math, no ML framework, no GPU.
+*   **Research Citation & Hardware Check:** A reusable `ResearchCitation` component grounds the Stanford routability claim with a real, visible citation everywhere it's referenced (landing page and walkthrough), instead of an unsourced assertion. `HardwareCheck` runs a genuine WebGPU adapter request (not a user-agent sniff) to tell visitors whether their own device could run a model like this fine-tune client-side.
 *   **Style Guide:** A dedicated style diagnostic page (`/style-guide`) confirming proper rendering of all design system components under dark/light themes.
+*   **Presentation Deck (`/pitch`):** A 12-slide, keyboard-navigable deck built from `docs/04-deck-outline.md`, presented live in this Next.js app rather than exported to a separate file — reuses this app's own design system, with `motion`-driven slide transitions, per-slide content stagger, and hand-built React/SVG visuals (`src/components/pitch/visuals.tsx`) carrying real labels from the actual content — an org wheel, a pillar→series map, a real-data budget chart — not decorative stock imagery.
 
 ---
 
@@ -45,7 +48,7 @@ All styling coordinates directly with the authoritative production tokens docume
 
 ## 💻 Local Setup & Development
 
-First, ensure you have Node.js (v18+) installed. Clone the repository and install the dependencies:
+First, ensure you have Node.js (v20.9+) installed — see `.node-version`. Clone the repository and install the dependencies:
 
 ```bash
 # Clone the repository
@@ -74,4 +77,26 @@ npm run build
 # Run code formatting and linting
 npm run lint
 ```
-The build process compiles static HTML files and routes (`/`, `/walkthrough`, `/style-guide`) with zero errors.
+The build process compiles static routes (`/`, `/walkthrough`, `/style-guide`) plus the dynamic `/api/classify` route with zero errors.
+
+To retrain the router classifier (e.g. after editing `src/data/router-dataset.json`):
+
+```bash
+npm run train:router
+```
+This regenerates `src/lib/router-model.json` and prints held-out accuracy — the model committed to the repo is not a fixture, it's a genuine training artifact.
+
+---
+
+## 🚀 Deploying to Render
+
+`render.yaml` at the repo root is a working [Render Blueprint](https://render.com/docs/blueprint-spec) with two services:
+
+- **`fine-tune-and-ship`** — this Next.js app. `buildCommand: npm ci && npm run build`, `startCommand: npm run start`, no GPU, standard Node web service. `npm run build && npm run start` locally is a faithful dry run of exactly what Render executes.
+- **`hermes-triage-inference`** — the real fine-tuned model (`finetune/`, see below) served by [llama.cpp's official server image](https://github.com/ggml-org/llama.cpp/blob/master/tools/server/README.md), no GPU required. It auto-downloads the GGUF from Hugging Face at boot via `LLAMA_ARG_HF_REPO`/`LLAMA_ARG_HF_FILE` — no custom Dockerfile needed. This is what the walkthrough's Step 5 "Deploy to Render" button actually deploys.
+
+To actually deploy: push this repo to a GitHub remote, then in the Render dashboard choose **New → Blueprint** and point it at the repo — Render will pick up `render.yaml` automatically. This step requires a Render account and can't be done from this codebase alone.
+
+## 🔧 Fine-tuning a real model (`finetune/`)
+
+`finetune/` is a genuine, executed fine-tuning run — not a mockup of one — proving out the exact fine-tune → export → deploy loop this case study pitches. Base model [`mlx-community/Hermes-3-Llama-3.2-3B-4bit`](https://huggingface.co/mlx-community/Hermes-3-Llama-3.2-3B-4bit), LoRA-tuned with [MLX](https://github.com/ml-explore/mlx) on a support-ticket-triage dataset, fused, and exported to GGUF for CPU serving via `finetune/scripts/export_gguf.sh` — see `finetune/results/before_after.md` for real before/after examples and `finetune/results/train_log.txt` for the training run.

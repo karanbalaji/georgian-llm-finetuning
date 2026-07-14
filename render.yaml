@@ -1,0 +1,45 @@
+services:
+  - type: web
+    name: fine-tune-and-ship
+    runtime: node
+    plan: starter
+    region: oregon
+    buildCommand: npm ci && npm run build
+    startCommand: npm run start
+    envVars:
+      - key: NODE_VERSION
+        value: 22.22.3
+      - key: NODE_ENV
+        value: production
+    healthCheckPath: /
+    autoDeploy: true
+
+  # The "hero deployment step" from /walkthrough Step 5 — a real llama.cpp
+  # inference server for the fine-tuned support-ticket-triage model, no GPU
+  # required. Uses llama.cpp's official server image and its built-in
+  # Hugging Face auto-download (LLAMA_ARG_HF_REPO/LLAMA_ARG_HF_FILE) rather
+  # than a custom Dockerfile, since the model itself is the only per-project
+  # variable — swap those two env vars to point this at any other GGUF repo.
+  # Requires: the GGUF pushed to the HF repo below (see finetune/README).
+  - type: web
+    name: hermes-triage-inference
+    runtime: image
+    image:
+      url: ghcr.io/ggml-org/llama.cpp:server
+    plan: standard # 2GB RAM — needed to hold the ~1.9GB Q4_K_M weights + KV cache; starter's 512MB will OOM
+    region: oregon
+    envVars:
+      - key: LLAMA_ARG_HF_REPO
+        value: karanbalaji/hermes-3-support-triage
+      - key: LLAMA_ARG_HF_FILE
+        value: hermes-triage-Q4_K_M.gguf
+      - key: LLAMA_ARG_HOST
+        value: 0.0.0.0
+      - key: LLAMA_ARG_PORT
+        value: "10000"
+      - key: PORT
+        value: "10000"
+      - key: LLAMA_ARG_CTX_SIZE
+        value: "2048"
+    healthCheckPath: /health
+    autoDeploy: true

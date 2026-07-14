@@ -39,3 +39,11 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# finetune/: keep scripts, dataset, and results in git; the actual model
+# weights (14GB fused_model/, 53MB adapters/) live on Hugging Face
+# (karanbalaji/hermes-3-support-triage), not in this repo. .venv is a local
+# uv-managed Python env, not source.
+/finetune/.venv
+/finetune/fused_model
+/finetune/adapters

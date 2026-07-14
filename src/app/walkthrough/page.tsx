@@ -8,6 +8,9 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { RouterDemo } from "@/components/RouterDemo";
+import { ResearchCitation } from "@/components/ResearchCitation";
+import { HardwareCheck } from "@/components/HardwareCheck";
 import {
   ArrowLeft,
   ChevronDown,
@@ -97,42 +100,69 @@ export default function WalkthroughPage() {
   const stepsQuickstart = [
     {
       num: 1,
-      title: "Clone the Toolkit & Install Dependencies",
-      desc: "Clone the repository and install the setup packages inside a Python virtual environment.",
-      code: `git clone https://github.com/georgian-io/LLM-Finetuning-Toolkit.git
-cd LLM-Finetuning-Toolkit
-python -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt`
+      title: "Install Georgian's LLM Fine-Tuning Toolkit",
+      desc: "The real CLI: a config-based tool, installed from PyPI. \"llmtune generate config\" scaffolds a starter YAML you edit rather than passing flags.",
+      code: `pipx install llm-toolkit
+llmtune generate config`
     },
     {
       num: 2,
-      title: "Prepare Your Dataset",
-      desc: "Format your training data as JSON Lines (.jsonl). Point the config file to your local path.",
-      code: `# File: data/my_dataset.jsonl
-{"prompt": "Classify ticket: Screen flickering", "completion": "Hardware"}
-{"prompt": "Classify ticket: Password reset failed", "completion": "Auth"}`
+      title: "Configure Your Experiment — The Local-First Router",
+      desc: "This walkthrough's flagship use case: a classifier that decides whether a query is answerable by a small local model or needs a frontier API. The toolkit is config-driven — data ingestion, base model, and LoRA hyperparameters all live in one YAML file.",
+      code: `# config.yml
+data:
+  file_type: "json"
+  path: "data/router_dataset.json"
+  prompt:
+    ### Instruction: Classify this query as "local" or "frontier".
+    ### Input: {query}
+    ### Output:
+  prompt_stub: { label }
+
+model:
+  hf_model_ckpt: "microsoft/Phi-3-mini-4k-instruct"
+  quantize: true
+  bitsandbytes:
+    load_in_4bit: true
+
+lora:
+  task_type: "CAUSAL_LM"
+  r: 32
+  target_modules: [q_proj, v_proj, k_proj, o_proj]`,
+      component: (
+        <div className="mt-4">
+          <ResearchCitation href="https://scalingintelligence.stanford.edu/pubs/ipw/">
+            The 71.3% local-answerable figure driving this dataset&apos;s two labels ("local" vs "frontier") is cited in full in the "Why this track exists" callout above.
+          </ResearchCitation>
+        </div>
+      )
     },
     {
       num: 3,
       title: "Run the Fine-Tuning Job",
-      desc: "Execute the command line wrapper pointing to the default configuration. LoRA hyperparameters are preset.",
-      code: `python -m finetune_toolkit.cli --config configs/phi3_lora.yaml --dataset data/my_dataset.jsonl`
+      desc: "One command reads the whole config and runs data ingestion, training, and QA tests together. Artifacts land under experiment/[hash]/ — a hash of the config, so reruns resume instead of restarting.",
+      code: `llmtune run ./config.yml
+
+# Outputs:
+# experiment/<hash>/dataset   -> HF datasets format
+# experiment/<hash>/model     -> PEFT (LoRA) weights, HF format
+# experiment/<hash>/qa        -> automated QA test results`
     },
     {
       num: 4,
-      title: "Export Optimized Weights",
-      desc: "Merge the learned LoRA adapters back into base parameters and quantize to GGUF or 4-bit AWQ formats.",
-      code: `python -m finetune_toolkit.export --adapter outputs/checkpoint-final --format gguf --output model_quantized.gguf`
+      title: "Export for Serving",
+      desc: "llmtune's own output is a PEFT adapter in HF format, not a servable single file. To run it through llama.cpp on Render's no-GPU infrastructure, merge and convert to GGUF — the same conversion pipeline behind this app's actual reference model (see the callout above).",
+      code: `python convert_hf_to_gguf.py experiment/<hash>/model --outfile model.gguf
+llama-quantize model.gguf model_q4.gguf Q4_K_M`
     },
     {
       num: 5,
       title: "Deploy to Render",
-      desc: "This is the hero deployment step. Click the button to launch a pre-configured serving endpoint hosted on Render. It runs the llama.cpp server blueprint automatically without GPU dependencies.",
+      desc: "This is the hero deployment step. Click the button to launch a pre-configured serving endpoint hosted on Render. It runs the llama.cpp server blueprint automatically without GPU dependencies. The reference model behind this button is a real fine-tune — a Hermes-3 LoRA trained on a support-ticket-triage dataset (the same fine-tune → GGUF → serve pipeline the router track above follows) — not a placeholder. Swap the env vars to point it at your own router model instead.",
       component: (
         <div className="mt-4 pt-2">
           <Link
-            href="https://render.com/deploy?repo=https://github.com/georgian-io/LLM-Finetuning-Toolkit"
+            href="https://render.com/deploy?repo=https://github.com/karanbalaji/georgian-llm-finetuning"
             target="_blank"
             className="inline-flex"
           >
@@ -141,48 +171,67 @@ pip install -r requirements.txt`
             </Button>
           </Link>
           <span className="block text-[11px] text-muted-foreground mt-2 italic">
-            *Includes one-click blueprints configuration template for Phi-3 (GGUF).
+            *Deploys this repo's render.yaml blueprint, including the llama.cpp inference service (GGUF, no GPU) currently serving the Hermes-3 support-triage fine-tune. Swap the LLAMA_ARG_HF_REPO/LLAMA_ARG_HF_FILE env vars to point it at your own fine-tuned model.
           </span>
         </div>
       )
     },
     {
       num: 6,
-      title: "Verify the Server Endpoint",
-      desc: "Execute a mock curl check against your active Render web service URL to verify latency and model outputs.",
-      code: `curl https://your-model-service.onrender.com/v1/chat/completions \\
+      title: "Verify the Router's Routing Decision",
+      desc: "Test the router's local/frontier decision live, right here — a separate, always-on, zero-GPU classifier (TF-IDF + logistic regression) that makes the routing call in milliseconds, distinct from the LLM you just deployed in Step 5. In a full build, this classifier decides whether to answer locally with a deployed model like that one, or forward to a frontier API.",
+      component: (
+        <div className="space-y-4">
+          <RouterDemo />
+          <HardwareCheck />
+        </div>
+      ),
+      code: `# Works locally right now:
+curl -X POST http://localhost:3000/api/classify \\
   -H "Content-Type: application/json" \\
-  -d '{"messages": [{"role": "user", "content": "Classify: App crashes on boot"}]}'`
+  -d '{"query": "Summarize this paragraph in one sentence."}'
+
+# Works the same way once you deploy this app to Render:
+curl -X POST https://<your-render-service>.onrender.com/api/classify \\
+  -H "Content-Type: application/json" \\
+  -d '{"query": "Design a fault-tolerant, multi-region database strategy."}'`
     }
   ];
 
   const stepsAdvanced = [
     {
       num: 1,
-      title: "Register a Custom Base Model",
-      desc: "Quantize any custom HuggingFace base model weights to 4-bit precision to fit standard CPU deployment budgets.",
-      code: `python -m finetune_toolkit.quantize \\
-  --model-id meta-llama/Meta-Llama-3-8B-Instruct \\
-  --precision 4bit \\
-  --output ./quantized_llama`
+      title: "Swap the Base Model",
+      desc: "Any open-source Hugging Face checkpoint works — point hf_model_ckpt at it. bitsandbytes handles the 4-bit quantization at load time, no separate quantize step needed.",
+      code: `# config.yml
+model:
+  hf_model_ckpt: "meta-llama/Meta-Llama-3-8B-Instruct"
+  quantize: true
+  bitsandbytes:
+    load_in_4bit: true
+    bnb_4bit_compute_dtype: "bf16"
+    bnb_4bit_quant_type: "nf4"`
     },
     {
       num: 2,
-      title: "Configure Custom LoRA Layers",
-      desc: "Customize target linear modules and attention projections inside the YAML configuration file.",
-      code: `# configs/custom_lora.yaml
+      title: "Enable Flash Attention 2 (CUDA GPUs only)",
+      desc: "The toolkit's optional speed path — requires an NVIDIA GPU, which is why this app's own reference fine-tune (Apple Silicon, no CUDA) didn't use it. Install flash-attn, then flip this in the config.",
+      code: `pipx inject llm-toolkit flash-attn --pip-args=--no-build-isolation
+
+# config.yml
 model:
-  base_path: "./quantized_llama"
-lora:
-  r: 16
-  alpha: 32
-  target_modules: ["q_proj", "v_proj", "k_proj", "o_proj"]`
+  torch_dtype: "bfloat16"
+  attn_implementation: "flash_attention_2"`
     },
     {
       num: 3,
-      title: "Run Distributed Optimization",
-      desc: "Run multi-GPU training if you have access to local compute rigs, or fallback to CPU offloaded training.",
-      code: `accelerate launch -m finetune_toolkit.cli --config configs/custom_lora.yaml`
+      title: "Add QA Tests",
+      desc: "Automated checks that run after training to confirm the fine-tune actually behaves as intended, not just that it completed.",
+      code: `# config.yml
+qa:
+  llm_metrics:
+    - length_test
+    - word_overlap_test`
     },
     {
       num: 4,
@@ -191,7 +240,7 @@ lora:
       component: (
         <div className="mt-4 pt-2">
           <Link
-            href="https://render.com/deploy?repo=https://github.com/georgian-io/LLM-Finetuning-Toolkit"
+            href="https://render.com/deploy?repo=https://github.com/karanbalaji/georgian-llm-finetuning"
             target="_blank"
             className="inline-flex"
           >
@@ -199,6 +248,9 @@ lora:
               <Layers className="size-4 mr-2" /> Deploy Custom Blueprint
             </Button>
           </Link>
+          <span className="block text-[11px] text-muted-foreground mt-2 italic">
+            *Starts from the same render.yaml as the basic track — edit the image/runtime block for your own container registry.
+          </span>
         </div>
       )
     }
@@ -274,6 +326,65 @@ lora:
         </FadeIn>
 
         <Separator />
+
+        {/* Why this track exists */}
+        <FadeIn delay={0.02}>
+          <div className="glass-panel rounded-2xl border-white/50 bg-gold/5 p-5 flex gap-3">
+            <Lightbulb className="size-5 text-gold shrink-0 mt-0.5" />
+            <div className="text-xs text-body/90 leading-relaxed space-y-1.5">
+              <p className="font-semibold text-navy text-sm">Why this track exists</p>
+              <p>
+                A{" "}
+                <a
+                  href="https://scalingintelligence.stanford.edu/pubs/ipw/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-primary underline underline-offset-2 hover:text-primary/80"
+                >
+                  Stanford study
+                </a>{" "}
+                found <strong>71.3% of real-world ChatGPT queries could be accurately answered by a small, local model</strong> instead of a frontier API — a figure Hugging Face CEO Clement Delangue has publicly pointed to as concrete rationale for local-first AI. That&apos;s the whole reason this track exists: fine-tune small, cheap, and private instead of routing everything through an expensive frontier API by default.
+              </p>
+              <p>
+                And it&apos;s why Render only shows up for the <strong>deploy/serve</strong> half, not training: Render has no GPU offering (see their own{" "}
+                <a
+                  href="https://feedback.render.com/features/p/gpu-instances"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-primary underline underline-offset-2 hover:text-primary/80"
+                >
+                  open GPU-instances feature request
+                </a>
+                , unresolved since 2020), and Render&apos;s{" "}
+                <a
+                  href="https://render.com/articles/infrastructure-for-scalable-ai-beyond-kubernetes"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-primary underline underline-offset-2 hover:text-primary/80"
+                >
+                  own AI-infrastructure guidance
+                </a>{" "}
+                tells users to reach for an external GPU provider for training and use Render for the app/serving layer. So that&apos;s exactly what this walkthrough does — fine-tune locally, then deploy the result to Render.
+              </p>
+            </div>
+          </div>
+        </FadeIn>
+
+        {/* Toolkit vs. actual proof-of-work callout */}
+        <FadeIn delay={0.02}>
+          <div className="glass-panel rounded-2xl border-white/50 bg-primary/5 p-5 flex gap-3">
+            <AlertTriangle className="size-5 text-primary shrink-0 mt-0.5" />
+            <div className="text-xs text-body/90 leading-relaxed space-y-1.5">
+              <p className="font-semibold text-navy text-sm">What&apos;s real here, and what&apos;s reference</p>
+              <p>
+                Steps 1–4 below show Georgian&apos;s actual <code className="font-mono text-[11px] bg-white/60 px-1 rounded">llmtune</code> CLI and config format — a config-based tool built on Hugging Face + PEFT/bitsandbytes, a CUDA-GPU stack. This dev machine is Apple Silicon, so the working proof-of-work behind Steps 5–6 (the deployed model and the live GGUF export pipeline) used <strong>MLX</strong> — Apple&apos;s native LoRA/fine-tuning framework — as the Mac-compatible equivalent, following the identical fine-tune → merge → quantize → serve shape.
+              </p>
+              <p>
+                Step 5 deploys a real Hermes-3 LoRA fine-tuned on a support-ticket-triage dataset — the same router pattern applied to a concrete domain, not a placeholder. Step 6&apos;s live demo hits a separate, always-on TF-IDF classifier that performs the actual routing decision; it&apos;s distinct from the LLM deployed in Step 5.
+              </p>
+            </div>
+          </div>
+        </FadeIn>
 
         {/* Tab Selection */}
         <FadeIn delay={0.05}>
@@ -401,12 +512,22 @@ lora:
                 <ExternalLink className="size-3.5" />
               </a>
               <a
-                href="https://github.com/ggerganov/llama.cpp"
+                href="https://github.com/ggml-org/llama.cpp"
                 target="_blank"
                 className="flex items-center justify-between p-3 rounded-lg border border-border bg-white hover:bg-surface-1/40 text-navy hover:text-primary transition-all"
               >
                 <span className="flex items-center gap-2">
                   <FileCode className="size-4" /> Serving Engine (llama.cpp)
+                </span>
+                <ExternalLink className="size-3.5" />
+              </a>
+              <a
+                href="https://scalingintelligence.stanford.edu/pubs/ipw/"
+                target="_blank"
+                className="flex items-center justify-between p-3 rounded-lg border border-border bg-white hover:bg-surface-1/40 text-navy hover:text-primary transition-all"
+              >
+                <span className="flex items-center gap-2">
+                  <BookOpen className="size-4" /> Stanford Study: 71.3% Local-Answerable
                 </span>
                 <ExternalLink className="size-3.5" />
               </a>

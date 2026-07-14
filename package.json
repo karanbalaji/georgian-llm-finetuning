@@ -6,7 +6,11 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "train:router": "node scripts/train-router.ts"
+  },
+  "engines": {
+    "node": ">=20.9.0"
   },
   "dependencies": {
     "@base-ui/react": "^1.6.0",

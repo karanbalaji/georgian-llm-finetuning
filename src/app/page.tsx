@@ -2,11 +2,13 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { motion } from "motion/react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { ResearchCitation } from "@/components/ResearchCitation";
 import {
   Dialog,
   DialogContent,
@@ -16,16 +18,17 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { 
-  ArrowRight, 
-  Calendar, 
-  Clock, 
-  MapPin, 
-  ExternalLink, 
-  Sparkles, 
+import {
+  ArrowRight,
+  Calendar,
+  Clock,
+  MapPin,
+  ExternalLink,
+  Sparkles,
   CheckCircle,
   Layers,
-  Cpu
+  Cpu,
+  Play
 } from "lucide-react";
 
 // Custom SVG components for brand/social icons since they aren't exported in this version of lucide-react
@@ -216,15 +219,17 @@ export default function EpisodeLandingPage() {
 
       {/* Hero Section */}
       <section id="about" className="pt-32 pb-20 px-6 sm:px-8">
-        <div className="max-w-5xl mx-auto flex flex-col items-center text-center space-y-8">
+        <div className="max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_0.85fr] gap-12 lg:gap-16 items-center">
+        <div className="flex flex-col items-start text-left space-y-6">
           <FadeIn>
-            <Badge variant="outline" className="rounded-full bg-primary/5 text-primary border-primary/20 text-xs py-1 px-4 font-semibold uppercase tracking-wider mb-2">
+            <Badge variant="outline" className="rounded-full bg-primary/5 text-primary border-primary/20 text-xs py-1 px-4 font-semibold uppercase tracking-wider">
               Builder Series · Season 1 · Episode 1
             </Badge>
           </FadeIn>
 
           <FadeIn delay={0.1}>
-            <h1 className="text-4xl sm:text-6xl font-bold text-navy tracking-tight max-w-3xl leading-[1.1]">
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-navy tracking-tight leading-[1.1]">
               Fine-Tune &{" "}
               <span className="font-accent italic font-normal text-primary">
                 Ship
@@ -233,14 +238,14 @@ export default function EpisodeLandingPage() {
           </FadeIn>
 
           <FadeIn delay={0.15}>
-            <p className="text-lg sm:text-xl text-body/90 max-w-2xl font-normal leading-relaxed">
+            <p className="text-lg sm:text-xl text-body/90 font-normal leading-relaxed">
               Fine-tune high-efficiency local models using Georgian&rsquo;s open-source toolkit,
               deploy them in one-click on Render, and showcase your production builds to top-tier startups.
             </p>
           </FadeIn>
 
           <FadeIn delay={0.2}>
-            <div className="flex flex-wrap gap-2.5 justify-center">
+            <div className="flex flex-wrap gap-2.5">
               <Badge className="bg-surface-1 text-navy border-border hover:bg-surface-1 py-1 px-3 rounded-full text-xs font-medium">
                 $4,000 Render Credits
               </Badge>
@@ -254,7 +259,7 @@ export default function EpisodeLandingPage() {
           </FadeIn>
 
           <FadeIn delay={0.25}>
-            <div className="flex flex-col sm:flex-row gap-4 items-center justify-center pt-2">
+            <div className="flex flex-col sm:flex-row gap-4 items-center pt-2">
               <Dialog>
                 <DialogTrigger render={<Button className="rounded-full bg-primary hover:bg-primary/95 text-white font-medium text-sm px-8 py-5 shadow-primary-sm hover:shadow-primary-md hover:-translate-y-0.5 transition-all" />}>
                   Register Now <ArrowRight className="size-4 ml-1" />
@@ -325,9 +330,9 @@ export default function EpisodeLandingPage() {
                           value={formData.track}
                           onChange={(e) => setFormData({ ...formData, track: e.target.value })}
                         >
-                          <option value="support-ticket">Support-Ticket Triage Classifier</option>
-                          <option value="domain-summarizer">Domain-Specific Summarizer API</option>
-                          <option value="code-assistant">Code-Review or Log-Anomaly Assistant</option>
+                          <option value="router-support">Local-First Router — Support Tickets</option>
+                          <option value="router-docs">Local-First Router — Internal Docs</option>
+                          <option value="router-code">Local-First Router — Code Review</option>
                           <option value="byoc">Bring Your Own Use Case</option>
                         </select>
                       </div>
@@ -357,41 +362,84 @@ export default function EpisodeLandingPage() {
             </div>
           </FadeIn>
 
-          {/* Insider Tip (Glass panel per spec) */}
+          {/* The flagship track, surfaced where a first-time visitor actually decides whether to care */}
           <FadeIn delay={0.3}>
-            <div className="glass-panel text-left p-6 mt-10 rounded-2xl border-white/50 max-w-3xl shadow-primary-md flex items-start gap-4">
-              <span className="p-2 rounded-full bg-primary/10 text-primary shrink-0">
-                <Sparkles className="size-5" />
-              </span>
-              <div>
-                <h4 className="text-sm font-semibold text-navy mb-1 uppercase tracking-wider">Insider Tip</h4>
-                <p className="text-sm text-body/90 leading-relaxed font-sans">
-                  The more specific your fine-tuning dataset, the better your deploy story — pick a narrow use case (like support classification or code audits), rather than building a generic assistant. It serves faster, costs less, and outperforms general APIs on narrow targets.
+            <ResearchCitation
+              href="https://scalingintelligence.stanford.edu/pubs/ipw/"
+              label="The flagship track: the local-first router"
+            >
+              A{" "}
+              <a
+                href="https://scalingintelligence.stanford.edu/pubs/ipw/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-primary underline underline-offset-2 hover:text-primary/80"
+              >
+                Stanford study
+              </a>{" "}
+              found <strong>71.3% of real-world ChatGPT queries</strong>{" "}could be accurately answered by a small, local model instead of a frontier API. Builders fine-tune and ship the classifier that makes that 71.3% cheap, fast, and private.
+            </ResearchCitation>
+          </FadeIn>
+        </div>
+
+        {/* Trailer placeholder — real fine-tune output, not a stock thumbnail; drops as an actual video at kickoff */}
+        <FadeIn delay={0.2}>
+          <Link href="/walkthrough" className="group block">
+            <div className="relative aspect-video rounded-2xl overflow-hidden border border-white/10 shadow-primary-md bg-navy">
+              <div className="absolute inset-0 p-5 sm:p-6 font-mono text-[11px] sm:text-xs leading-relaxed">
+                <div className="flex items-center gap-1.5 mb-4">
+                  <span className="size-2.5 rounded-full bg-white/20" />
+                  <span className="size-2.5 rounded-full bg-white/20" />
+                  <span className="size-2.5 rounded-full bg-white/20" />
+                  <span className="ml-2 text-white/40 text-[10px] tracking-wide uppercase">hermes-triage · real fine-tune output</span>
+                </div>
+                <p className="text-primary/80">$ ollama run hermes-triage</p>
+                <p className="text-white/50 mt-1.5">
+                  &gt;&gt;&gt; Ticket: Charger cable frayed and sparking. Let me know what you need from me.
+                </p>
+                <p className="mt-3 text-white/90">
+                  Category: <span className="text-gold">Hardware</span> | Priority: <span className="text-gold">High</span> | Reply: Thanks for flagging this — we&apos;ll escalate to hardware support and arrange a replacement or repair. Expect an update within 1 business day.
                 </p>
               </div>
-            </div>
-          </FadeIn>
 
-          {/* Event Metadata Bar */}
-          <FadeIn delay={0.35}>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-3xl glass-panel p-6 mt-6 rounded-2xl border-white/40 divide-y md:divide-y-0 md:divide-x divide-border">
-              <div className="flex flex-col items-center justify-center p-3">
-                <Calendar className="size-5 text-primary mb-2" />
-                <span className="text-xs text-muted-foreground">Kickoff Day</span>
-                <span className="text-sm font-semibold text-navy">September 24, 2026</span>
-              </div>
-              <div className="flex flex-col items-center justify-center p-3">
-                <MapPin className="size-5 text-primary mb-2" />
-                <span className="text-xs text-muted-foreground">Format</span>
-                <span className="text-sm font-semibold text-navy">Toronto (In-person) &amp; Virtual</span>
-              </div>
-              <div className="flex flex-col items-center justify-center p-3">
-                <Clock className="size-5 text-primary mb-2" />
-                <span className="text-xs text-muted-foreground">Challenge Period</span>
-                <span className="text-sm font-semibold text-navy">8-Week Guided Timeline</span>
+              <div
+                className="absolute inset-0 transition-opacity group-hover:opacity-80"
+                style={{ background: "radial-gradient(circle at center, rgba(15,23,42,0.6) 0%, rgba(15,23,42,0.15) 40%, rgba(15,23,42,0) 60%)" }}
+              />
+              <div className="absolute inset-0 flex items-center justify-center">
+                <span className="size-14 rounded-full bg-white/95 flex items-center justify-center shadow-primary-md group-hover:scale-105 transition-transform">
+                  <Play className="size-5 text-navy fill-navy ml-0.5" />
+                </span>
               </div>
             </div>
-          </FadeIn>
+            <p className="mt-3 text-xs text-muted-foreground text-center">
+              Season trailer drops at kickoff. The output above is real —{" "}
+              <span className="text-primary font-medium">try it live →</span>
+            </p>
+          </Link>
+        </FadeIn>
+        </div>
+
+        {/* Event Metadata Bar */}
+        <FadeIn delay={0.35}>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-3xl mx-auto glass-panel p-6 mt-14 rounded-2xl border-white/40 divide-y md:divide-y-0 md:divide-x divide-border">
+            <div className="flex flex-col items-center justify-center p-3">
+              <Calendar className="size-5 text-primary mb-2" />
+              <span className="text-xs text-muted-foreground">Kickoff Day</span>
+              <span className="text-sm font-semibold text-navy">September 24, 2026</span>
+            </div>
+            <div className="flex flex-col items-center justify-center p-3">
+              <MapPin className="size-5 text-primary mb-2" />
+              <span className="text-xs text-muted-foreground">Format</span>
+              <span className="text-sm font-semibold text-navy">Toronto (In-person) &amp; Virtual</span>
+            </div>
+            <div className="flex flex-col items-center justify-center p-3">
+              <Clock className="size-5 text-primary mb-2" />
+              <span className="text-xs text-muted-foreground">Challenge Period</span>
+              <span className="text-sm font-semibold text-navy">8-Week Guided Timeline</span>
+            </div>
+          </div>
+        </FadeIn>
         </div>
       </section>
 
@@ -437,21 +485,25 @@ export default function EpisodeLandingPage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {/* Host 1 */}
+            {/* Host 1 — Karan Balaji */}
             <motion.div
               whileHover={{ y: -4 }}
               className="glass-panel p-6 rounded-2xl shadow-primary-sm hover:shadow-primary-md border-white/50 bg-white/70 transition-all flex flex-col justify-between"
             >
               <div className="space-y-4">
-                <div className="size-16 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-primary font-bold text-lg">
-                  JD
-                </div>
+                <Image
+                  src="/images/karan-balaji.jpeg"
+                  alt="Karan Balaji"
+                  width={64}
+                  height={64}
+                  className="size-16 rounded-full object-cover border border-primary/20"
+                />
                 <div>
-                  <h3 className="text-lg font-semibold text-navy">Dr. Jean Dupont</h3>
-                  <p className="text-xs text-primary font-medium font-sans">Lead Researcher, Georgian AI Lab</p>
+                  <h3 className="text-lg font-semibold text-navy">Karan Balaji</h3>
+                  <p className="text-xs text-primary font-medium font-sans">Co-host</p>
                 </div>
                 <p className="text-sm text-body/90 leading-relaxed font-sans">
-                  Specializes in open-weights model quantization and low-rank adaptation. Jean authored the core quantization module of the LLM Fine-Tuning Toolkit.
+                  Built this season&rsquo;s prototype end-to-end — a real LoRA fine-tune, GGUF export pipeline, and Render deployment — for this case study.
                 </p>
               </div>
               <div className="flex items-center gap-3 pt-6 border-t border-border/60 mt-6">
@@ -464,56 +516,58 @@ export default function EpisodeLandingPage() {
               </div>
             </motion.div>
 
-            {/* Host 2 */}
+            {/* Host 2 — Azin Asgarian */}
             <motion.div
               whileHover={{ y: -4 }}
               className="glass-panel p-6 rounded-2xl shadow-primary-sm hover:shadow-primary-md border-white/50 bg-white/70 transition-all flex flex-col justify-between"
             >
               <div className="space-y-4">
-                <div className="size-16 rounded-full bg-primary-mid/10 border border-primary-mid/20 flex items-center justify-center text-primary-mid font-bold text-lg">
-                  AW
-                </div>
+                <Image
+                  src="/images/azin.png"
+                  alt="Azin Asgarian"
+                  width={64}
+                  height={64}
+                  className="size-16 rounded-full object-cover border border-primary-mid/20"
+                />
                 <div>
-                  <h3 className="text-lg font-semibold text-navy">Alex Wong</h3>
-                  <p className="text-xs text-primary font-medium font-sans">Staff Infrastructure Engineer, Render</p>
+                  <h3 className="text-lg font-semibold text-navy">Azin Asgarian</h3>
+                  <p className="text-xs text-primary font-medium font-sans">AI Technical Lead, Georgian AI Lab</p>
                 </div>
                 <p className="text-sm text-body/90 leading-relaxed font-sans">
-                  Focuses on high-concurrency model hosting and developer workflows. Alex is the creator of Render&rsquo;s one-click deploy blueprints.
+                  Leads applied AI research with Georgian&rsquo;s portfolio companies. Has spoken publicly on transfer learning — the model this series is named for.
                 </p>
               </div>
               <div className="flex items-center gap-3 pt-6 border-t border-border/60 mt-6">
-                <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
+                <a href="https://www.linkedin.com/in/azin-asgarian-08175a120/" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition-colors">
                   <LinkedinIcon className="size-4" />
-                </a>
-                <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
-                  <TwitterIcon className="size-4" />
                 </a>
               </div>
             </motion.div>
 
-            {/* Host 3 */}
+            {/* Host 3 — Paul Inder */}
             <motion.div
               whileHover={{ y: -4 }}
               className="glass-panel p-6 rounded-2xl shadow-primary-sm hover:shadow-primary-md border-white/50 bg-white/70 transition-all flex flex-col justify-between"
             >
               <div className="space-y-4">
-                <div className="size-16 rounded-full bg-gold/10 border border-gold/40 flex items-center justify-center text-navy font-bold text-lg">
-                  SM
-                </div>
+                <Image
+                  src="/images/paul-inder.jpeg"
+                  alt="Paul Inder"
+                  width={64}
+                  height={64}
+                  className="size-16 rounded-full object-cover border border-gold/40"
+                />
                 <div>
-                  <h3 className="text-lg font-semibold text-navy">Sarah Miller</h3>
-                  <p className="text-xs text-primary font-medium font-sans">TL Ambassador, NYC Hub</p>
+                  <h3 className="text-lg font-semibold text-navy">Paul Inder</h3>
+                  <p className="text-xs text-primary font-medium font-sans">Machine Learning Engineer, Georgian</p>
                 </div>
                 <p className="text-sm text-body/90 leading-relaxed font-sans">
-                  AI developer community organizer and compiler engineer. Sarah will moderate the virtual build rooms and guide project teams in NYC/SF.
+                  Builds applied ML systems at Georgian, with prior experience shipping AI-driven products at ideal.com and Ceridian.
                 </p>
               </div>
               <div className="flex items-center gap-3 pt-6 border-t border-border/60 mt-6">
                 <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
                   <LinkedinIcon className="size-4" />
-                </a>
-                <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
-                  <GithubIcon className="size-4" />
                 </a>
               </div>
             </motion.div>

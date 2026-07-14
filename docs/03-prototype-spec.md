@@ -56,11 +56,13 @@ This is a light, professional theme — a deliberate contrast to ClawBuilders' d
 - **Troubleshooting** — collapsible section for common failure points
 - **Resources list** at the bottom: toolkit GitHub, toolkit docs, Render deploy docs, base model links
 
-## Build Notes for the Next Step
+## Build Notes (historical — from before the prototype existed)
 
-- **The scaffold already exists at the repo root**: Next.js 16 (App Router, TypeScript, Tailwind v4) + shadcn/ui with theme tokens remapped to the Georgian palette, Motion installed for animation, Satoshi/Zodiak wired via Fontshare, and a live `/style-guide` page verifying the whole system (`npm run build` passes; `npm run dev` → `localhost:3000/style-guide`). The next step is building these two pages, not project setup.
+These notes described the *planned* build before anything existed. Left here for context; where reality diverged, that's noted inline rather than silently deleted.
+
+- **The scaffold already exists at the repo root**: Next.js 16 (App Router, TypeScript, Tailwind v4) + shadcn/ui with theme tokens remapped to the Georgian palette, Motion installed for animation, Satoshi/Zodiak wired via Fontshare, and a live `/style-guide` page verifying the whole system (`npm run build` passes; `npm run dev` → `localhost:3000/style-guide`).
 - Available shadcn components: `button`, `card`, `badge`, `tabs`, `avatar`, `separator`, `dialog`. Custom utilities in `globals.css`: `glass-panel`, `glass-panel-strong`, `shadow-primary-sm/md/ring`, `bg-hero-gradient`.
 - Motion usage per `/design.md`: fade + slight upward slide on section entrance, 40–60ms staggered grid reveals, subtle hover lift — polish, not spectacle.
-- No real backend needed; the Recap/Gallery placeholder content is enough for a presentation demo.
+- ~~No real backend needed~~ — superseded: the prototype grew a real backend (`/api/classify`, a genuine trained logistic-regression classifier) and a real deployment target (`render.yaml`'s `hermes-triage-inference` llama.cpp service), because a panel doing live technical scrutiny is a different bar than a presentation mockup. The Recap/Gallery section is still a styled placeholder, since that content only exists after a real Demo Day.
 - Build as a real, clickable prototype (not mockup images), since the demo is walked through live in the panel session.
-- Verify the walkthrough page's commands against the actual [LLM-Finetuning-Toolkit README](https://github.com/georgian-io/LLM-Finetuning-Toolkit) during the build — don't invent CLI syntax.
+- ~~Verify the walkthrough page's commands against the actual LLM-Finetuning-Toolkit README~~ — superseded: rather than only checking commands against the toolkit's docs, `finetune/` actually runs the fine-tune → export → serve loop end to end (MLX LoRA, not the toolkit's own CLI, but the same underlying workflow the toolkit automates) — see `finetune/results/` for the real training log and before/after output, and `README.md#-fine-tuning-a-real-model-finetune`.

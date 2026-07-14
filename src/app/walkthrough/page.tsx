@@ -23,7 +23,11 @@ import {
   BookOpen,
   FileCode,
   AlertTriangle,
-  Lightbulb
+  Lightbulb,
+  ListChecks,
+  KeyRound,
+  Package,
+  Cpu
 } from "lucide-react";
 
 // Custom SVG components for brand/social icons since they aren't exported in this version of lucide-react
@@ -180,12 +184,7 @@ llama-quantize model.gguf model_q4.gguf Q4_K_M`
       num: 6,
       title: "Verify the Router's Routing Decision",
       desc: "Test the router's local/frontier decision live, right here — a separate, always-on, zero-GPU classifier (TF-IDF + logistic regression) that makes the routing call in milliseconds, distinct from the LLM you just deployed in Step 5. In a full build, this classifier decides whether to answer locally with a deployed model like that one, or forward to a frontier API.",
-      component: (
-        <div className="space-y-4">
-          <RouterDemo />
-          <HardwareCheck />
-        </div>
-      ),
+      component: <RouterDemo />,
       code: `# Works locally right now:
 curl -X POST http://localhost:3000/api/classify \\
   -H "Content-Type: application/json" \\
@@ -268,6 +267,56 @@ qa:
     {
       q: "Render web service cold starts and health check failures",
       a: "Inference engines on free tiers might take 1–2 minutes to compile model loads on boot. To mitigate health check timeouts, update the initialDelaySeconds parameter inside render.yaml blueprint to 120."
+    }
+  ];
+
+  const prerequisites = [
+    {
+      icon: Terminal,
+      title: "Python 3.9+",
+      desc: "The toolkit itself is a Python CLI — everything below assumes this is already on your PATH.",
+      code: "python3 --version",
+      href: "https://www.python.org/downloads/",
+      linkLabel: "Install Python"
+    },
+    {
+      icon: Package,
+      title: "pipx",
+      desc: "Installs llm-toolkit into an isolated environment — what Step 1's pipx install command uses.",
+      code: `pip install pipx
+pipx ensurepath`,
+      href: "https://pipx.pypa.io/stable/",
+      linkLabel: "pipx docs"
+    },
+    {
+      icon: KeyRound,
+      title: "Hugging Face account + token",
+      desc: "Needed to pull base model weights, and required for gated models like Llama-3 (Advanced track).",
+      code: `export HF_TOKEN="hf_..."`,
+      href: "https://huggingface.co/settings/tokens",
+      linkLabel: "Create a token"
+    },
+    {
+      icon: FileCode,
+      title: "llama.cpp",
+      desc: "Converts and quantizes your fine-tuned model to GGUF for CPU serving — used in Step 4.",
+      code: `git clone https://github.com/ggml-org/llama.cpp
+cd llama.cpp && pip install -r requirements.txt`,
+      href: "https://github.com/ggml-org/llama.cpp",
+      linkLabel: "llama.cpp repo"
+    },
+    {
+      icon: Layers,
+      title: "A Render account",
+      desc: "Free tier, no credit card required — needed for Step 5's one-click deploy.",
+      href: "https://render.com/register",
+      linkLabel: "Sign up free"
+    },
+    {
+      icon: Cpu,
+      title: "GPU with CUDA",
+      desc: "Speeds up training and unlocks Flash Attention 2 in the Advanced track. The Quickstart track below runs fine on CPU alone.",
+      optional: true
     }
   ];
 
@@ -357,6 +406,48 @@ qa:
               <p>
                 Render doesn&apos;t offer GPU instances, so training happens on your own machine or a cloud GPU — Render is for serving the result. That&apos;s why this walkthrough splits fine-tuning (Steps 1–4, wherever you have compute) from deployment (Step 5, on Render).
               </p>
+            </div>
+          </div>
+        </FadeIn>
+
+        {/* Before You Start: hardware check + prerequisites */}
+        <FadeIn delay={0.03}>
+          <div className="space-y-6">
+            <h2 className="text-xl font-bold text-navy tracking-tight flex items-center gap-2">
+              <ListChecks className="size-5 text-primary" /> Before You Start
+            </h2>
+
+            <HardwareCheck />
+
+            <div className="space-y-3">
+              <h3 className="text-xs font-semibold text-navy uppercase tracking-wider">Prerequisites</h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                {prerequisites.map((req) => (
+                  <div key={req.title} className="glass-panel rounded-xl border-white/50 bg-white/60 p-4 space-y-2">
+                    <div className="flex items-center gap-2 text-sm font-semibold text-navy">
+                      <req.icon className="size-4 text-primary shrink-0" />
+                      <span>{req.title}</span>
+                      {req.optional && (
+                        <Badge variant="outline" className="ml-auto text-[9px] rounded-full text-muted-foreground border-border shrink-0">
+                          Optional
+                        </Badge>
+                      )}
+                    </div>
+                    <p className="text-xs text-body/80 leading-relaxed">{req.desc}</p>
+                    {req.code && <CodeBlock code={req.code} />}
+                    {req.href && (
+                      <a
+                        href={req.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 text-[11px] font-medium text-primary hover:text-primary/80"
+                      >
+                        {req.linkLabel ?? "Learn more"} <ExternalLink className="size-3" />
+                      </a>
+                    )}
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </FadeIn>

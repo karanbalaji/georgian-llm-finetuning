@@ -27,8 +27,7 @@ import {
   Sparkles,
   CheckCircle,
   Layers,
-  Cpu,
-  Play
+  Cpu
 } from "lucide-react";
 
 // Custom SVG components for brand/social icons since they aren't exported in this version of lucide-react
@@ -382,41 +381,23 @@ export default function EpisodeLandingPage() {
           </FadeIn>
         </div>
 
-        {/* Trailer placeholder — real fine-tune output, not a stock thumbnail; drops as an actual video at kickoff */}
+        {/* Real explainer video — Georgian's LLM Fine-Tuning Toolkit, uploaded to YouTube */}
         <FadeIn delay={0.2}>
-          <Link href="/walkthrough" className="group block">
-            <div className="relative aspect-video rounded-2xl overflow-hidden border border-white/10 shadow-primary-md bg-navy">
-              <div className="absolute inset-0 p-5 sm:p-6 font-mono text-[11px] sm:text-xs leading-relaxed">
-                <div className="flex items-center gap-1.5 mb-4">
-                  <span className="size-2.5 rounded-full bg-white/20" />
-                  <span className="size-2.5 rounded-full bg-white/20" />
-                  <span className="size-2.5 rounded-full bg-white/20" />
-                  <span className="ml-2 text-white/40 text-[10px] tracking-wide uppercase">hermes-triage · real fine-tune output</span>
-                </div>
-                <p className="text-primary/80">$ ollama run hermes-triage</p>
-                <p className="text-white/50 mt-1.5">
-                  &gt;&gt;&gt; Ticket: Charger cable frayed and sparking. Let me know what you need from me.
-                </p>
-                <p className="mt-3 text-white/90">
-                  Category: <span className="text-gold">Hardware</span> | Priority: <span className="text-gold">High</span> | Reply: Thanks for flagging this — we&apos;ll escalate to hardware support and arrange a replacement or repair. Expect an update within 1 business day.
-                </p>
-              </div>
-
-              <div
-                className="absolute inset-0 transition-opacity group-hover:opacity-80"
-                style={{ background: "radial-gradient(circle at center, rgba(15,23,42,0.6) 0%, rgba(15,23,42,0.15) 40%, rgba(15,23,42,0) 60%)" }}
-              />
-              <div className="absolute inset-0 flex items-center justify-center">
-                <span className="size-14 rounded-full bg-white/95 flex items-center justify-center shadow-primary-md group-hover:scale-105 transition-transform">
-                  <Play className="size-5 text-navy fill-navy ml-0.5" />
-                </span>
-              </div>
-            </div>
-            <p className="mt-3 text-xs text-muted-foreground text-center">
-              Season trailer drops at kickoff. The output above is real —{" "}
-              <span className="text-primary font-medium">try it live →</span>
-            </p>
-          </Link>
+          <div className="relative aspect-video rounded-2xl overflow-hidden border border-white/10 shadow-primary-md bg-navy">
+            <iframe
+              className="absolute inset-0 w-full h-full"
+              src="https://www.youtube-nocookie.com/embed/hpWoxb3aBAo?cc_load_policy=1&modestbranding=1&rel=0"
+              title="Georgian LLM Fine-Tuning Toolkit — Explainer"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowFullScreen
+            />
+          </div>
+          <p className="mt-3 text-xs text-muted-foreground text-center">
+            How Georgian&rsquo;s LLM Fine-Tuning Toolkit works, in under 2 minutes —{" "}
+            <Link href="/walkthrough" className="text-primary font-medium hover:underline">
+              try it live →
+            </Link>
+          </p>
         </FadeIn>
         </div>
 

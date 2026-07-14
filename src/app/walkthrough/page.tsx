@@ -158,7 +158,7 @@ llama-quantize model.gguf model_q4.gguf Q4_K_M`
     {
       num: 5,
       title: "Deploy to Render",
-      desc: "This is the hero deployment step. Click the button to launch a pre-configured serving endpoint hosted on Render. It runs the llama.cpp server blueprint automatically without GPU dependencies. The reference model behind this button is a real fine-tune — a Hermes-3 LoRA trained on a support-ticket-triage dataset (the same fine-tune → GGUF → serve pipeline the router track above follows) — not a placeholder. Swap the env vars to point it at your own router model instead.",
+      desc: "Click the button to launch a pre-configured serving endpoint on Render — the llama.cpp server blueprint, no GPU dependencies. It ships with a Hermes-3 LoRA fine-tune trained on a support-ticket-triage dataset as the reference model; swap the env vars to point it at your own fine-tuned model instead.",
       component: (
         <div className="mt-4 pt-2">
           <Link
@@ -215,7 +215,7 @@ model:
     {
       num: 2,
       title: "Enable Flash Attention 2 (CUDA GPUs only)",
-      desc: "The toolkit's optional speed path — requires an NVIDIA GPU, which is why this app's own reference fine-tune (Apple Silicon, no CUDA) didn't use it. Install flash-attn, then flip this in the config.",
+      desc: "The toolkit's optional speed path — requires an NVIDIA GPU. Install flash-attn, then flip this in the config.",
       code: `pipx inject llm-toolkit flash-attn --pip-args=--no-build-isolation
 
 # config.yml
@@ -343,44 +343,19 @@ qa:
                 >
                   Stanford study
                 </a>{" "}
-                found <strong>71.3% of real-world ChatGPT queries could be accurately answered by a small, local model</strong> instead of a frontier API — a figure Hugging Face CEO Clement Delangue has publicly pointed to as concrete rationale for local-first AI. That&apos;s the whole reason this track exists: fine-tune small, cheap, and private instead of routing everything through an expensive frontier API by default.
-              </p>
-              <p>
-                And it&apos;s why Render only shows up for the <strong>deploy/serve</strong> half, not training: Render has no GPU offering (see their own{" "}
+                found <strong>71.3% of real-world ChatGPT queries could be accurately answered by a small, local model</strong> instead of a frontier API — a figure{" "}
                 <a
-                  href="https://feedback.render.com/features/p/gpu-instances"
+                  href="https://x.com/ClementDelangue/status/2071951499660292496?s=20"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-primary underline underline-offset-2 hover:text-primary/80"
                 >
-                  open GPU-instances feature request
-                </a>
-                , unresolved since 2020), and Render&apos;s{" "}
-                <a
-                  href="https://render.com/articles/infrastructure-for-scalable-ai-beyond-kubernetes"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-primary underline underline-offset-2 hover:text-primary/80"
-                >
-                  own AI-infrastructure guidance
+                  Hugging Face CEO Clement Delangue has publicly pointed to
                 </a>{" "}
-                tells users to reach for an external GPU provider for training and use Render for the app/serving layer. So that&apos;s exactly what this walkthrough does — fine-tune locally, then deploy the result to Render.
-              </p>
-            </div>
-          </div>
-        </FadeIn>
-
-        {/* Toolkit vs. actual proof-of-work callout */}
-        <FadeIn delay={0.02}>
-          <div className="glass-panel rounded-2xl border-white/50 bg-primary/5 p-5 flex gap-3">
-            <AlertTriangle className="size-5 text-primary shrink-0 mt-0.5" />
-            <div className="text-xs text-body/90 leading-relaxed space-y-1.5">
-              <p className="font-semibold text-navy text-sm">What&apos;s real here, and what&apos;s reference</p>
-              <p>
-                Steps 1–4 below show Georgian&apos;s actual <code className="font-mono text-[11px] bg-white/60 px-1 rounded">llmtune</code> CLI and config format — a config-based tool built on Hugging Face + PEFT/bitsandbytes, a CUDA-GPU stack. This dev machine is Apple Silicon, so the working proof-of-work behind Steps 5–6 (the deployed model and the live GGUF export pipeline) used <strong>MLX</strong> — Apple&apos;s native LoRA/fine-tuning framework — as the Mac-compatible equivalent, following the identical fine-tune → merge → quantize → serve shape.
+                as concrete rationale for local-first AI. That&apos;s the whole reason this track exists: fine-tune small, cheap, and private instead of routing everything through an expensive frontier API by default.
               </p>
               <p>
-                Step 5 deploys a real Hermes-3 LoRA fine-tuned on a support-ticket-triage dataset — the same router pattern applied to a concrete domain, not a placeholder. Step 6&apos;s live demo hits a separate, always-on TF-IDF classifier that performs the actual routing decision; it&apos;s distinct from the LLM deployed in Step 5.
+                Render doesn&apos;t offer GPU instances, so training happens on your own machine or a cloud GPU — Render is for serving the result. That&apos;s why this walkthrough splits fine-tuning (Steps 1–4, wherever you have compute) from deployment (Step 5, on Render).
               </p>
             </div>
           </div>

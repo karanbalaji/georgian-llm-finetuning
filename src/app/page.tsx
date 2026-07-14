@@ -78,7 +78,7 @@ function FadeIn({
 export default function EpisodeLandingPage() {
   const [scrolled, setScrolled] = useState(false);
   const [registerSuccess, setRegisterSuccess] = useState(false);
-  const [formData, setFormData] = useState({ name: "", email: "", github: "", track: "support-ticket" });
+  const [formData, setFormData] = useState({ name: "", email: "", github: "", track: "router-support" });
 
   useEffect(() => {
     const handleScroll = () => {
@@ -191,15 +191,15 @@ export default function EpisodeLandingPage() {
                       />
                     </div>
                     <div className="space-y-1">
-                      <label className="text-xs font-semibold text-navy">Target Challenge Track</label>
+                      <label className="text-xs font-semibold text-navy">Router Use Case</label>
                       <select
                         className="w-full px-3 py-2 border border-border rounded-lg text-sm bg-white/70 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
                         value={formData.track}
                         onChange={(e) => setFormData({ ...formData, track: e.target.value })}
                       >
-                        <option value="support-ticket">Support-Ticket Triage Classifier</option>
-                        <option value="domain-summarizer">Domain-Specific Summarizer API</option>
-                        <option value="code-assistant">Code-Review or Log-Anomaly Assistant</option>
+                        <option value="router-support">Local-First Router — Support Tickets</option>
+                        <option value="router-docs">Local-First Router — Internal Docs</option>
+                        <option value="router-code">Local-First Router — Code Review</option>
                         <option value="byoc">Bring Your Own Use Case</option>
                       </select>
                     </div>
@@ -324,7 +324,7 @@ export default function EpisodeLandingPage() {
                         />
                       </div>
                       <div className="space-y-1">
-                        <label className="text-xs font-semibold text-navy">Target Challenge Track</label>
+                        <label className="text-xs font-semibold text-navy">Router Use Case</label>
                         <select
                           className="w-full px-3 py-2 border border-border rounded-lg text-sm bg-white/70 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
                           value={formData.track}
@@ -354,11 +354,11 @@ export default function EpisodeLandingPage() {
               </Link>
 
               {/* Single highest priority secondary CTA per design system - Gold */}
-              <a href="#recap" className="w-full sm:w-auto">
+              <Link href="/pitch" className="w-full sm:w-auto">
                 <Button className="w-full rounded-full bg-gold hover:bg-gold/90 text-navy font-semibold text-sm px-8 py-5 shadow-primary-sm hover:shadow-primary-md transition-all">
-                  AI Challenge Report
+                  View the Pitch Deck
                 </Button>
-              </a>
+              </Link>
             </div>
           </FadeIn>
 
@@ -575,82 +575,149 @@ export default function EpisodeLandingPage() {
         </div>
       </section>
 
-      {/* Kickoff Day Agenda */}
+      {/* Program Timeline + Kickoff Day Agenda */}
       <section id="agenda" className="py-20 px-6 sm:px-8">
-        <div className="max-w-5xl mx-auto space-y-12">
+        <div className="max-w-5xl mx-auto space-y-16">
           <div className="text-center space-y-3">
             <Badge variant="outline" className="rounded-full">Schedule</Badge>
             <h2 className="text-3xl font-bold text-navy tracking-tight">
-              Kickoff Day{" "}
+              The 8-Week{" "}
               <span className="font-accent italic font-normal text-primary">
-                Agenda
+                Program
               </span>
             </h2>
             <p className="text-muted-foreground max-w-md mx-auto text-sm">
-              Kickstart the build window with direct live instructions and workshops.
+              Two in-person evenings bookend a self-directed build window — not an 8-week-long event.
             </p>
           </div>
 
+          {/* Full program timeline: Launch -> Build -> Judge -> Ship */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {/* Card 1 */}
             <Card className="glass-panel border-white/40 shadow-primary-sm hover:shadow-primary-md transition-all rounded-2xl bg-white/50">
               <CardHeader className="pb-2">
                 <Badge className="bg-primary/10 text-primary hover:bg-primary/20 w-fit rounded-full text-[10px] font-semibold py-0.5">
-                  18:00 - 18:30 EST
+                  Week 1 · Launch
                 </Badge>
-                <CardTitle className="text-navy font-semibold text-base mt-2">Kickoff &amp; Intros</CardTitle>
+                <CardTitle className="text-navy font-semibold text-base mt-2">In-Person Kickoff</CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-xs text-body/90 leading-relaxed font-sans">
-                  Welcome notes, community alignment, and activation instructions for the $50 Render credit wallets.
+                  ~4hrs at Georgian&rsquo;s Toronto office. Hands-on walkthrough of the fine-tuning toolkit → Render deploy pipeline, co-hosted by AI Lab + Render engineers.
                 </p>
               </CardContent>
             </Card>
 
-            {/* Card 2 */}
             <Card className="glass-panel border-white/40 shadow-primary-sm hover:shadow-primary-md transition-all rounded-2xl bg-white/50">
               <CardHeader className="pb-2">
                 <Badge className="bg-primary/10 text-primary hover:bg-primary/20 w-fit rounded-full text-[10px] font-semibold py-0.5">
-                  18:30 - 19:15 EST
+                  Weeks 2–6 · Build
                 </Badge>
-                <CardTitle className="text-navy font-semibold text-base mt-2">Toolkit Walkthrough</CardTitle>
+                <CardTitle className="text-navy font-semibold text-base mt-2">Self-Directed Build</CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-xs text-body/90 leading-relaxed font-sans">
-                  Deep-dive into the LLM Fine-Tuning Toolkit. Pointing at weights, loading dataset slices, and quantization options.
+                  Fine-tune and deploy on your own time. Weekly office hours + Discord support from AI Lab and Render engineers. Submissions close end of week 6.
                 </p>
               </CardContent>
             </Card>
 
-            {/* Card 3 */}
             <Card className="glass-panel border-white/40 shadow-primary-sm hover:shadow-primary-md transition-all rounded-2xl bg-white/50">
               <CardHeader className="pb-2">
                 <Badge className="bg-primary/10 text-primary hover:bg-primary/20 w-fit rounded-full text-[10px] font-semibold py-0.5">
-                  19:15 - 20:00 EST
+                  Week 7 · Judge
                 </Badge>
-                <CardTitle className="text-navy font-semibold text-base mt-2">Render Deploy Demo</CardTitle>
+                <CardTitle className="text-navy font-semibold text-base mt-2">Scoring</CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-xs text-body/90 leading-relaxed font-sans">
-                  One-click blueprints deployment demonstration. Setting up static endpoints and scaling without GPUs.
+                  Georgian AI Lab + Render engineers score submissions: technical execution, creativity of use case, and deployment quality.
                 </p>
               </CardContent>
             </Card>
 
-            {/* Card 4 */}
             <Card className="glass-panel border-white/40 shadow-primary-sm hover:shadow-primary-md transition-all rounded-2xl bg-white/50">
               <CardHeader className="pb-2">
                 <Badge className="bg-primary/10 text-primary hover:bg-primary/20 w-fit rounded-full text-[10px] font-semibold py-0.5">
-                  20:00 - 20:30 EST
+                  Week 8 · Ship
                 </Badge>
-                <CardTitle className="text-navy font-semibold text-base mt-2">Office Hours Setup</CardTitle>
+                <CardTitle className="text-navy font-semibold text-base mt-2">Demo Day</CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-xs text-body/90 leading-relaxed font-sans">
-                  Interactive Q&amp;A session, team matching finalization, and booking mentor office hours slot list.
+                  ~4hrs, in-person. Live showcase, winners announced, deployed submissions go live. Top performers fast-tracked into Render&rsquo;s interview pipeline.
                 </p>
               </CardContent>
             </Card>
+          </div>
+
+          {/* Kickoff day detail */}
+          <div className="space-y-6">
+            <div className="text-center space-y-1">
+              <span className="text-xs font-semibold text-primary uppercase tracking-wider">Week 1, in detail</span>
+              <h3 className="text-xl font-bold text-navy tracking-tight">Kickoff Day Agenda</h3>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              {/* Card 1 */}
+              <Card className="glass-panel border-white/40 shadow-primary-sm hover:shadow-primary-md transition-all rounded-2xl bg-white/50">
+                <CardHeader className="pb-2">
+                  <Badge className="bg-primary/10 text-primary hover:bg-primary/20 w-fit rounded-full text-[10px] font-semibold py-0.5">
+                    18:00 - 18:30 EST
+                  </Badge>
+                  <CardTitle className="text-navy font-semibold text-base mt-2">Kickoff &amp; Intros</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-xs text-body/90 leading-relaxed font-sans">
+                    Welcome notes, community alignment, and activation instructions for the $50 Render credit wallets.
+                  </p>
+                </CardContent>
+              </Card>
+
+              {/* Card 2 */}
+              <Card className="glass-panel border-white/40 shadow-primary-sm hover:shadow-primary-md transition-all rounded-2xl bg-white/50">
+                <CardHeader className="pb-2">
+                  <Badge className="bg-primary/10 text-primary hover:bg-primary/20 w-fit rounded-full text-[10px] font-semibold py-0.5">
+                    18:30 - 19:15 EST
+                  </Badge>
+                  <CardTitle className="text-navy font-semibold text-base mt-2">Toolkit Walkthrough</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-xs text-body/90 leading-relaxed font-sans">
+                    Deep-dive into the LLM Fine-Tuning Toolkit. Pointing at weights, loading dataset slices, and quantization options.
+                  </p>
+                </CardContent>
+              </Card>
+
+              {/* Card 3 */}
+              <Card className="glass-panel border-white/40 shadow-primary-sm hover:shadow-primary-md transition-all rounded-2xl bg-white/50">
+                <CardHeader className="pb-2">
+                  <Badge className="bg-primary/10 text-primary hover:bg-primary/20 w-fit rounded-full text-[10px] font-semibold py-0.5">
+                    19:15 - 20:00 EST
+                  </Badge>
+                  <CardTitle className="text-navy font-semibold text-base mt-2">Render Deploy Demo</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-xs text-body/90 leading-relaxed font-sans">
+                    One-click blueprints deployment demonstration. Setting up static endpoints and scaling without GPUs.
+                  </p>
+                </CardContent>
+              </Card>
+
+              {/* Card 4 */}
+              <Card className="glass-panel border-white/40 shadow-primary-sm hover:shadow-primary-md transition-all rounded-2xl bg-white/50">
+                <CardHeader className="pb-2">
+                  <Badge className="bg-primary/10 text-primary hover:bg-primary/20 w-fit rounded-full text-[10px] font-semibold py-0.5">
+                    20:00 - 20:30 EST
+                  </Badge>
+                  <CardTitle className="text-navy font-semibold text-base mt-2">Office Hours Setup</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-xs text-body/90 leading-relaxed font-sans">
+                    Interactive Q&amp;A session, team matching finalization, and booking mentor office hours slot list.
+                  </p>
+                </CardContent>
+              </Card>
+            </div>
           </div>
         </div>
       </section>

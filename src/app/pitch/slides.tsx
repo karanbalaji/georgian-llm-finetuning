@@ -23,6 +23,7 @@ import { VisionTimeline } from "@/components/pitch/VisionTimeline";
 
 const STANFORD_URL = "https://scalingintelligence.stanford.edu/pubs/ipw/";
 const HF_URL = "https://huggingface.co/karanbalaji/hermes-3-support-triage";
+const DELANGUE_URL = "https://x.com/ClementDelangue/status/2071951499660292496?s=20";
 
 export const slides = [
   // 1 — Title
@@ -306,7 +307,8 @@ export const slides = [
       <p className="text-sm text-body/85 leading-relaxed">
         A <CitationLink href={STANFORD_URL}>Stanford study</CitationLink> found{" "}
         <strong>71.3% of real-world ChatGPT queries</strong>{" "}could be answered by a small, local model instead of
-        a frontier API — a figure Hugging Face CEO Clement Delangue has cited as rationale for local-first AI.
+        a frontier API — a figure{" "}
+        <CitationLink href={DELANGUE_URL}>Hugging Face CEO Clement Delangue has cited</CitationLink> as rationale for local-first AI.
       </p>
     </div>
   </SlideShell>,

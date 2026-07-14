@@ -31,6 +31,8 @@ The design language follows `/design.md` (extracted from georgian.io's live CSS 
 
 **Overall: 100%** (weighted evenly across 20 phases)
 
+*Note on phase 15's "15→12 slides" label: phases 16-19 subsequently added 4 slides back (Core Audiences, Sharp Prioritization/roadmap, Community Partnerships) to close gaps found in the deck content audit. The deck's final, current state is 15 slides (14 main + appendix) — see `04-deck-outline.md`, not the phase-15 count.*
+
 ## Status Legend
 
 - `pending` — not started

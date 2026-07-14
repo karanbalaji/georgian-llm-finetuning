@@ -218,8 +218,8 @@ export default function EpisodeLandingPage() {
 
       {/* Hero Section */}
       <section id="about" className="pt-32 pb-20 px-6 sm:px-8">
-        <div className="max-w-6xl mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_0.85fr] gap-12 lg:gap-16 items-center">
+        <div className="max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-[0.9fr_1.3fr] gap-12 lg:gap-16 items-center">
         <div className="flex flex-col items-start text-left space-y-6">
           <FadeIn>
             <Badge variant="outline" className="rounded-full bg-primary/5 text-primary border-primary/20 text-xs py-1 px-4 font-semibold uppercase tracking-wider">

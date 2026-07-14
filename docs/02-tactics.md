@@ -59,11 +59,11 @@ The 6–10 week window is the *program's* span — a real fine-tune-and-deploy i
 
 | Line item | Amount | Notes |
 |---|---|---|
-| Render compute/deploy credits for participants | $4,000 | Seed credits per participant/team so cost isn't a barrier to entry |
-| Prizes | $2,500 | 1st / 2nd / 3rd + a "best use case" wildcard, split so creativity is rewarded alongside technical polish |
+| Render compute/deploy credits for participants | $4,000 | $50 seed credit × ≈80 expected participants/teams, so cost isn't a barrier to entry |
+| Prizes | $2,500 | $1,000 (1st) / $600 (2nd) / $400 (3rd) / $500 ("best use case" wildcard) — cash, separate from the Render credit line above |
 | Demo Day production | $2,000 | Venue, food, recording, photography — feeds the recap/gallery |
 | Promo & swag | $1,000 | Launch push, participant swag |
-| Buffer | $500 | |
+| Buffer | $500 | Contingency for the AI Tinkerers Toronto / BUILD FUTURE co-host night — the venue and food are free (Georgian's own Toronto office, per Community Partnerships in `01-strategy.md`); this covers incidentals, not a paid sponsorship line |
 
 ## Judging Rubric
 

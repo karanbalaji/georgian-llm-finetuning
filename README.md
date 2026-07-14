@@ -90,12 +90,11 @@ This regenerates `src/lib/router-model.json` and prints held-out accuracy — th
 
 ## 🚀 Deploying to Render
 
-`render.yaml` at the repo root is a working [Render Blueprint](https://render.com/docs/blueprint-spec) with two services:
+This site itself is hosted on Vercel (https://georgian.karanbalaji.com/) — Render isn't needed to serve the marketing/demo pages. `render.yaml` at the repo root is a working [Render Blueprint](https://render.com/docs/blueprint-spec) that deploys exactly one service, the actual thing a workshop participant would replicate for their own fine-tune:
 
-- **`fine-tune-and-ship`** — this Next.js app. `buildCommand: npm ci && npm run build`, `startCommand: npm run start`, no GPU, standard Node web service. `npm run build && npm run start` locally is a faithful dry run of exactly what Render executes.
-- **`hermes-triage-inference`** — the real fine-tuned model (`finetune/`, see below) served by [llama.cpp's official server image](https://github.com/ggml-org/llama.cpp/blob/master/tools/server/README.md), no GPU required. It auto-downloads the GGUF from Hugging Face at boot via `LLAMA_ARG_HF_REPO`/`LLAMA_ARG_HF_FILE` — no custom Dockerfile needed. This is what the walkthrough's Step 5 "Deploy to Render" button actually deploys.
+- **`hermes-triage-inference`** — the real fine-tuned model (`finetune/`, see below) served by [llama.cpp's official server image](https://github.com/ggml-org/llama.cpp/blob/master/tools/server/README.md), no GPU required. It auto-downloads the GGUF from Hugging Face at boot via `LLAMA_ARG_HF_REPO`/`LLAMA_ARG_HF_FILE` — no custom Dockerfile needed. This is what the walkthrough's Step 5 "Deploy to Render" button actually deploys: participants swap those two env vars to point the same blueprint at their own fine-tuned model instead of this repo's Hermes-3 support-triage reference.
 
-To actually deploy: push this repo to a GitHub remote, then in the Render dashboard choose **New → Blueprint** and point it at the repo — Render will pick up `render.yaml` automatically. This step requires a Render account and can't be done from this codebase alone.
+To actually deploy: push this repo (or your own fork with your own fine-tune) to a GitHub remote, then in the Render dashboard choose **New → Blueprint** and point it at the repo — Render will pick up `render.yaml` automatically. This step requires a Render account and can't be done from this codebase alone.
 
 ## 🔧 Fine-tuning a real model (`finetune/`)
 

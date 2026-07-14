@@ -132,11 +132,11 @@ export function RenderPipeline() {
 }
 
 const BUDGET = [
-  { label: "Render compute/deploy credits", amount: 4000, color: NAVY },
-  { label: "Prizes", amount: 2500, color: PRIMARY },
+  { label: "Render compute/deploy credits", amount: 4000, color: NAVY, detail: "$50 credit × ≈80 participants/teams" },
+  { label: "Prizes", amount: 2500, color: PRIMARY, detail: "$1,000 / $600 / $400 / $500 wildcard — cash" },
   { label: "Demo Day production", amount: 2000, color: "#8fa0d6" },
   { label: "Promo & swag", amount: 1000, color: "#c3ccec" },
-  { label: "Buffer", amount: 500, color: GOLD },
+  { label: "Buffer", amount: 500, color: GOLD, detail: "community co-host night incidentals — venue/food free" },
 ];
 const BUDGET_TOTAL = BUDGET.reduce((sum, b) => sum + b.amount, 0);
 
@@ -148,12 +148,17 @@ export function BudgetChart() {
           <div key={b.label} style={{ width: `${(b.amount / BUDGET_TOTAL) * 100}%`, background: b.color }} />
         ))}
       </div>
-      <div className="flex flex-col gap-2 mt-5">
+      <div className="flex flex-col gap-2.5 mt-5">
         {BUDGET.map((b) => (
-          <div key={b.label} className="flex items-center justify-between gap-3 text-xs">
-            <span className="flex items-center gap-2 text-body/80">
-              <span className="size-2.5 rounded-full shrink-0" style={{ background: b.color }} />
-              {b.label}
+          <div key={b.label} className="flex items-start justify-between gap-3 text-xs">
+            <span className="flex items-start gap-2 text-body/80">
+              <span className="size-2.5 rounded-full shrink-0 mt-1" style={{ background: b.color }} />
+              <span>
+                {b.label}
+                {b.detail && (
+                  <span className="block text-[10.5px] text-muted-foreground/80 mt-0.5">{b.detail}</span>
+                )}
+              </span>
             </span>
             <span className="font-semibold text-navy shrink-0">${b.amount.toLocaleString()}</span>
           </div>

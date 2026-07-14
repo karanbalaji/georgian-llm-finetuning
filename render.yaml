@@ -1,19 +1,4 @@
 services:
-  - type: web
-    name: fine-tune-and-ship
-    runtime: node
-    plan: starter
-    region: oregon
-    buildCommand: npm ci && npm run build
-    startCommand: npm run start
-    envVars:
-      - key: NODE_VERSION
-        value: 22.22.3
-      - key: NODE_ENV
-        value: production
-    healthCheckPath: /
-    autoDeploy: true
-
   # The "hero deployment step" from /walkthrough Step 5 — a real llama.cpp
   # inference server for the fine-tuned support-ticket-triage model, no GPU
   # required. Uses llama.cpp's official server image and its built-in

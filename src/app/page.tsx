@@ -540,7 +540,7 @@ export default function EpisodeLandingPage() {
                 />
                 <div>
                   <h3 className="text-lg font-semibold text-navy">Paul Inder</h3>
-                  <p className="text-xs text-primary font-medium font-sans">Machine Learning Engineer, Georgian</p>
+                  <p className="text-xs text-primary font-medium font-sans">AI Technical Lead, Georgian</p>
                 </div>
                 <p className="text-sm text-body/90 leading-relaxed font-sans">
                   Builds applied ML systems at Georgian, with prior experience shipping AI-driven products at ideal.com and Ceridian.

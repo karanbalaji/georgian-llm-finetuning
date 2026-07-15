@@ -79,6 +79,12 @@ export function HardwareCheck() {
           {cores} logical CPU cores detected — real, matching hardware Render&apos;s no-GPU standard plan gives you.
         </p>
       )}
+
+      <p className="text-[10.5px] text-muted-foreground/80 pt-1 border-t border-border/60 mt-2">
+        This only checks browser-side <em>inference</em> (WebGPU) — it&apos;s separate from fine-<em>tuning</em>.
+        Training with llmtune still requires a real NVIDIA CUDA GPU (see Prerequisites below), regardless of what
+        this shows — a Mac&apos;s Metal/WebGPU adapter doesn&apos;t count for that step.
+      </p>
     </div>
   );
 }

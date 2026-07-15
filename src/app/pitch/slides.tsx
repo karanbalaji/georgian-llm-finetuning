@@ -295,8 +295,8 @@ export const slides = [
   <SlideShell key="why-render" eyebrow="Part II · Fine-Tune & Ship, with Render" visual={<RenderPipeline />}>
     <SlideTitle size="md">The deploy half of the story, not just the fine-tune half.</SlideTitle>
     <p className="text-lg text-body/85 leading-relaxed mt-5">
-      Here&rsquo;s Season 1&rsquo;s first Builder Series flagship, in practice. Replit and You.com are the obvious
-      picks for a fine-tuning toolkit — the least differentiated answer on a panel that sees multiple candidates.
+      Here&rsquo;s Season 1&rsquo;s first Builder Series flagship, in practice. An AI-native company is the obvious
+      pick for a fine-tuning toolkit — the least differentiated answer on a panel that sees multiple candidates.
       Georgian&rsquo;s toolkit only tells half the lifecycle. Render&rsquo;s entire business is the other half:
       deploying and serving models.
     </p>
@@ -349,7 +349,10 @@ export const slides = [
       </p>
     </div>
     <ul className="mt-6 space-y-2 text-lg text-white/80 max-w-3xl">
-      <li>→ A real LoRA fine-tune of Hermes-3 on a support-triage dataset</li>
+      <li>
+        → A real LoRA fine-tune of Hermes-3 on a support-triage dataset — trained with MLX (Apple Silicon), the
+        CUDA-free substitute for the toolkit&rsquo;s own bitsandbytes training step, same fine-tune → export → serve pipeline
+      </li>
       <li>
         → A real, publicly downloadable model on{" "}
         <a href={HF_URL} target="_blank" rel="noopener noreferrer" className="text-gold underline underline-offset-2">
@@ -362,7 +365,7 @@ export const slides = [
 
   // 14 — Both goals + the ask
   <SlideShell key="both-goals" eyebrow="The Payoff" visual={<Flywheel />}>
-    <SlideTitle size="md">Toolkit gets real usage. Render sees real code — before a resume.</SlideTitle>
+    <SlideTitle size="md">Toolkit gets real usage. Render sees real code — before it ever sees a resume.</SlideTitle>
     <div className="flex flex-col gap-4 mt-5">
       <div>
         <p className="text-sm font-semibold uppercase tracking-wider text-primary mb-1.5">Toolkit promotion</p>

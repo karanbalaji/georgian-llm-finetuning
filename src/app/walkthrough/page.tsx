@@ -270,7 +270,15 @@ qa:
     }
   ];
 
-  const prerequisites = [
+  const prerequisites: {
+    icon: typeof Terminal;
+    title: string;
+    desc: string;
+    code?: string;
+    href?: string;
+    linkLabel?: string;
+    optional?: boolean;
+  }[] = [
     {
       icon: Terminal,
       title: "Python 3.9+",
@@ -315,8 +323,9 @@ cd llama.cpp && pip install -r requirements.txt`,
     {
       icon: Cpu,
       title: "GPU with CUDA",
-      desc: "Speeds up training and unlocks Flash Attention 2 in the Advanced track. The Quickstart track below runs fine on CPU alone.",
-      optional: true
+      desc: "llmtune's config uses bitsandbytes 4-bit quantization (QLoRA) — there's no CPU-only training path, a real CUDA GPU is required. No local GPU? Google Colab's free tier gives you a real T4 (16GB VRAM), enough for this Quickstart track. Kaggle Notebooks (30 free GPU-hrs/week) works too. Skip Flash Attention 2 in the Advanced track on either, though — it needs Ampere or newer, and T4 isn't supported.",
+      href: "https://colab.research.google.com/",
+      linkLabel: "Open Google Colab"
     }
   ];
 
@@ -458,7 +467,7 @@ cd llama.cpp && pip install -r requirements.txt`,
             <div className="flex justify-center sm:justify-start mb-8">
               <TabsList className="bg-surface-1 border border-border p-1 rounded-full gap-1">
                 <TabsTrigger value="quickstart" className="rounded-full px-5 py-2 text-xs font-semibold data-active:bg-white data-active:text-primary data-active:shadow-primary-sm transition-all cursor-pointer">
-                  <Terminal className="size-3.5 mr-1" /> Quickstart (Phi-3 / CPU)
+                  <Terminal className="size-3.5 mr-1" /> Quickstart (Phi-3 / GPU)
                 </TabsTrigger>
                 <TabsTrigger value="advanced" className="rounded-full px-5 py-2 text-xs font-semibold data-active:bg-white data-active:text-primary data-active:shadow-primary-sm transition-all cursor-pointer">
                   <Layers className="size-3.5 mr-1" /> Advanced (Llama-3 / Custom)
